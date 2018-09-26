@@ -25,7 +25,7 @@ Prerequisites.
 
 - Client machine running Windows 10, running PowerShell Core 6.1.0.
 
-Two virtual box VMs in bridged networking mode.
+Two virtual box VMs in bridged networking mode.  Access to these machines is done almost entirely through PowerShell Sessions or SSH.
 
 - Windows Server 2016, 1803 Semi Annual, PowerShell remoting configured, user created that has admin access.
 - Ubuntu Server 18.04.1 LTS, user created that has root access.
@@ -253,6 +253,14 @@ This example is going to use Ubuntu 18.04.1 Server Linux distribution.  This var
 I've picked Ubuntu as it tends to be one of the most common Linux distributions and the easiest to use as well.
 
 This is from the official Microsoft documentation that can be found [here](https://docs.microsoft.com/en-us/powershell/scripting/setup/installing-powershell-core-on-linux?view=powershell-6#ubuntu-1804).
+
+Connect to the Ubuntu machine with SSH
+
+```bash
+ssh username@machinename.domain.local
+```
+
+Install PowerShell Core.
 
 ```bash
 # Check distribution version (may not work on all distributions)
