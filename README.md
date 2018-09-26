@@ -5,14 +5,14 @@
 - [PowerShell Core](#powershell-core)
     - [VMs](#vms)
         - [Windows (Server 2016 VM)](#windows-server-2016-vm)
-            - [Install Windows Server](#install-windows-server)
+            - [Install PowerShell Core - Windows Server](#install-powershell-core---windows-server)
             - [Setting up WinRM for PS Remoting](#setting-up-winrm-for-ps-remoting)
             - [WindowsCompatibility Module for Missing Commands](#windowscompatibility-module-for-missing-commands)
             - [Setting up OpenSSH for PS Remoting (Windows)](#setting-up-openssh-for-ps-remoting-windows)
             - [Markdown and Web Cmdlets](#markdown-and-web-cmdlets)
             - [Extras Not in This Demo (Windows)](#extras-not-in-this-demo-windows)
         - [Linux (Ubuntu VM)](#linux-ubuntu-vm)
-            - [Install Ubuntu](#install-ubuntu)
+            - [Install PowerShell Core - Ubuntu Server](#install-powershell-core---ubuntu-server)
             - [Setting up OpenSSH for PS Remoting (Linux)](#setting-up-openssh-for-ps-remoting-linux)
             - [Extras Not in This Demo (Linux)](#extras-not-in-this-demo-linux)
     - [Links and Resources](#links-and-resources)
@@ -32,7 +32,7 @@ Two virtual box VMs in bridged networking mode.  Access to these machines is don
 
 ### Windows (Server 2016 VM)
 
-#### Install Windows Server
+#### Install PowerShell Core - Windows Server
 
 Currently there is no way built into Windows to install PowerShell Core.  Your options are manual install or... that's it, just manuall install.  You can install by downloading the MSI and running through the GUI install, or installing via the command line.
 
@@ -176,7 +176,7 @@ Set-Location -Path C:\OpenSSH-Win64
 # Run the install
 .\install-sshd.ps1
 
-# Note, the services install stopped, more important not that in this method the are registered to the location you epxanded the archive to.
+# Note, the services install stopped, more important not that in this method the are registered to the location you expanded the archive to.
 Get-Service -Name ssh* | Select-Object -Property Status,Name,DisplayName,BinaryPathName
 
 # We need to setup an ssh Subsystem, but before we do, one very important note.
@@ -246,7 +246,7 @@ $uninstall
 
 ### Linux (Ubuntu VM)
 
-#### Install Ubuntu
+#### Install PowerShell Core - Ubuntu Server
 
 This example is going to use Ubuntu 18.04.1 Server Linux distribution.  This varies a lot between each distribution, read the [official documentation](https://docs.microsoft.com/en-us/powershell/scripting/setup/installing-powershell-core-on-linux?view=powershell-6) for your distribution.
 
@@ -346,8 +346,8 @@ Direct install, upgrade, and removal (not covered in this demo).  This example u
 sudo apt-get upgrade powershell
 
 # Direct install of PowerShell
-wget -q https://github.com/PowerShell/PowerShell/releases/download/v6.1.0/powershell_6.1.0-1.ubuntu.18.04_amd64.deb #Download the pacakge from the Github releases
-sudo dpkg -i powershell_6.1.0-1.ubuntu.18.04_amd64.deb #Install the pacakge (It will fail with unmet dependencies the next command will resolve it)
+wget -q https://github.com/PowerShell/PowerShell/releases/download/v6.1.0/powershell_6.1.0-1.ubuntu.18.04_amd64.deb #Download the package from the Github releases
+sudo dpkg -i powershell_6.1.0-1.ubuntu.18.04_amd64.deb #Install the package (It will fail with unmet dependencies the next command will resolve it)
 sudo apt-get install -f #Run apt-get install and fix broken dependencies with -f switch
 
 # Uninstall / Remove PowerShell
