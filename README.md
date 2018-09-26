@@ -68,7 +68,7 @@ Start-Process -FilePath 'msiexec.exe' -NoNewWindow -ArgumentList @('/i', 'PowerS
 exit
 ```
 
-**NOTE**: Due to pwsh being added to the path it won't be avialable until you restart your PowerShell session!
+**NOTE**: Due to pwsh being added to the path it won't be available until you restart your PowerShell session!
 We'll open a new session with the update PATH environment variable.
 
 ```powershell
