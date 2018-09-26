@@ -4,7 +4,6 @@
 
 - [PowerShell Core](#powershell-core)
     - [VMs](#vms)
-    - [Demo](#demo)
         - [Windows (Server 2016 VM)](#windows-server-2016-vm)
             - [Install Windows Server](#install-windows-server)
             - [Setting up WinRM for PS Remoting](#setting-up-winrm-for-ps-remoting)
@@ -24,20 +23,12 @@
 
 Prerequisites.
 
-| Machine | Username | Password | OS |
-| --- | --- | --- | --- |
-| ubuntu | rjp | Password1 | Ubuntu Server 18.04.1 |
-| windows | rjp | Password1 | Windows Server 2016 , Semi Annual 1803 |
+- Client machine running Windows 10, running PowerShell Core 6.1.0.
 
-## Demo
+Two virtual box VMs in bridged networking mode.
 
-Before I start.
-
-```powershell
-# When running through the demo and rolling back snapshots the local_hosts will be aware of the pre snapshot key
-# If you get "WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!" This will fix it.
-Remove-Item -Path $env:USERPROFILE\.ssh\known_hosts
-```
+- Windows Server 2016, 1803 Semi Annual, PowerShell remoting configured, user created that has admin access.
+- Ubuntu Server 18.04.1 LTS, user created that has root access.
 
 ### Windows (Server 2016 VM)
 
