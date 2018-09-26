@@ -356,6 +356,8 @@ sudo apt-get remove powershell
 
 ## Links and Resources
 
+Much of the information here can be found at the links below.
+
 - [Whats New in PowerShell Core 6.0](https://docs.microsoft.com/en-us/powershell/scripting/whats-new/what-s-new-in-powershell-core-60?view=powershell-6)
 - [Whats New in PowerShell Core 6.1](https://docs.microsoft.com/en-us/powershell/scripting/whats-new/what-s-new-in-powershell-core-61?view=powershell-6)
 - [Installing PowerShell Core on Windows](https://docs.microsoft.com/en-us/powershell/scripting/setup/installing-powershell-core-on-windows?view=powershell-6)
