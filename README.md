@@ -28,25 +28,30 @@ Prerequisites.
 Two virtual box VMs in bridged networking mode.  Access to these machines is done almost entirely through PowerShell Sessions or SSH.
 
 - Windows Server 2016, 1803 Semi Annual, PowerShell remoting configured, user created that has admin access.
+    - Hostname: windows
 - Ubuntu Server 18.04.1 LTS, user created that has root access.
+    - Hostname: ubuntu
 
 ### Windows (Server 2016 VM)
 
 #### Install PowerShell Core - Windows Server
 
-Currently there is no way built into Windows to install PowerShell Core.  Your options are manual install or... that's it, just manuall install.  You can install by downloading the MSI and running through the GUI install, or installing via the command line.
+Currently there is no way built into Windows to install PowerShell Core.  Your options are manual install or... that's it, just manually install.  You can install by downloading the MSI and running through the GUI install, or installing via the command line.
 
 This example is on Windows Server and assumes there is no GUI installed.
 
 First we'll open a PSSession to Windows PowerShell on the remote server.
 
 ```powershell
+Clear-Host
 Enter-PSSession -ComputerName windows -Credential (Get-Credential)
 ```
 
 Now that we're on the remote system we'll download and install PowerShell Core.
 
 ```powershell
+Set-location -Path C:\
+
 # Download the file.
 Invoke-WebRequest -Uri 'https://github.com/PowerShell/PowerShell/releases/download/v6.1.0/PowerShell-6.1.0-win-x64.msi' -OutFile 'PowerShell-6.1.0-win-x64.msi' #Will throw a TLS error.
 
@@ -58,11 +63,12 @@ Invoke-WebRequest -Uri 'https://github.com/PowerShell/PowerShell/releases/downlo
 Invoke-WebRequest -Uri 'https://github.com/PowerShell/PowerShell/releases/download/v6.1.0/PowerShell-6.1.0-win-x64.msi' -OutFile 'PowerShell-6.1.0-win-x64.msi'
 
 # Verify download integrity 64 Bit MSI (E67A1460C3D24C52B1DE30DAECBCE7ED7BAAC62DCEF8A862D2FCADC31A9B4239)
-Get-FileHash -Path '.\PowerShell-6.1.0-win-x64.msi' -Algorithm SHA256 | Tee-Object -Variable pwshCheckSum
+Get-FileHash -Path '.\PowerShell-6.1.0-win-x64.msi' -Algorithm SHA256 -OutVariable pwshCheckSum
 $pwshCheckSum.Hash -eq 'E67A1460C3D24C52B1DE30DAECBCE7ED7BAAC62DCEF8A862D2FCADC31A9B4239'
 
 # Install PowerShell Core (could call msiexec and arguments with Start-Process if you want)
 Start-Process -FilePath 'msiexec.exe' -NoNewWindow -ArgumentList @('/i', 'PowerShell-6.1.0-win-x64.msi', '/qn', '/L*e', '.\pwsh.log') -Wait
+pwsh
 
 # Exit
 exit
@@ -72,6 +78,7 @@ exit
 We'll open a new session with the update PATH environment variable.
 
 ```powershell
+Clear-Host
 Enter-PSSession -ComputerName windows -Credential (Get-Credential)
 ```
 
@@ -87,10 +94,13 @@ $PSVersionTable
 # We can see that PowerShell core installed
 pwsh -c {$PSVersiontable}
 
+# We can see there are no endpoints for PowerShell Core
+Get-PSSessionConfiguration
+
 # To be able to PSSession into PowerShell core via WinRM we need to run Install-PowerShellRemoting.ps1 in $PSHome
 # You could do login and switch to pwsh as your shell to run this but I like to be lazy so we'll run it through our Windows PowerShell PSSession.
 # https://docs.microsoft.com/en-us/powershell/scripting/core-powershell/wsman-remoting-in-powershell-core?view=powershell-6
-Push-Location -Path 'C:\Program Files\PowerShell\6\'
+Set-Location -Path 'C:\Program Files\PowerShell\6\'
 .\Install-PowerShellRemoting.ps1 -PowerShellHome "C:\Program Files\PowerShell\6\"
 
 # NOTE: This throws an error when running it remote, it still creates the new endpoints though.  If you run it locally it will not throw an error when creating new endpoints.
@@ -100,6 +110,7 @@ Push-Location -Path 'C:\Program Files\PowerShell\6\'
 Enter PS Session again to the server to confirm the 2 new endpoints exist.
 
 ```powershell
+Clear-Host
 Enter-PSSession -ComputerName windows -Credential (Get-Credential)
 ```
 
@@ -110,6 +121,14 @@ Check for the new endpoints.
 Get-PSSessionConfiguration
 
 # Exit
+exit
+```
+
+We can now use this new endpoint to WinRM into PowerShell Core
+
+```powershell
+Enter-PSSession -ComputerName windows -Credential (Get-Credential) -ConfigurationName 'PowerShell.6.1.0'
+
 exit
 ```
 
@@ -257,7 +276,7 @@ This is from the official Microsoft documentation that can be found [here](https
 Connect to the Ubuntu machine with SSH
 
 ```bash
-ssh username@machinename.domain.local
+ssh username@ubuntu
 ```
 
 Install PowerShell Core.
@@ -311,10 +330,14 @@ Get-Process
 PS Remoting into PowerShell Core on Linux requires a little setup like we had to do on Windows.  This actually tends to be a little easier as Linux OS's are better equipped to handle command line text editing.
 
 ```powershell
+# This will fail, there is no subsystem setup.  To setup the Subsystem we'll walk through the following.
 Enter-PSSession -HostName ubuntu -UserName rjp -SSHTransport
+
+# SSH in the old fashioned way to setup PowerShell SSH remoting.
+ssh username@ubuntu
 ```
 
-This will fail, there is no subsystem setup.  To setup the Subsystem we'll walk through the following.
+Setting up SSH as a PowerShell remoting transport.
 
 ```powershell
 # Install OpenSSH client and server if not done already
